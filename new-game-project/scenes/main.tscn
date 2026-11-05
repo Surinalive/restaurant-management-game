@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://cqow47bch5ocs"]
+
+[ext_resource type="Script" uid="uid://et1v30l85vd4" path="res://scripts/main.gd" id="1_o5qli"]
+
+[node name="MainMenu" type="Control" unique_id=893311394]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_o5qli")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=545199748]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 144.0
+offset_right = 760.0
+offset_bottom = 216.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2" unique_id=2026361013]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="VBoxContainer2/HBoxContainer2" unique_id=713189027]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player"
+horizontal_alignment = 1
+
+[node name="ChangeName" type="Button" parent="VBoxContainer2/HBoxContainer2" unique_id=1029135863]
+layout_mode = 2
+text = "Change name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2" unique_id=425000540]
+layout_mode = 2
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer2/HBoxContainer" unique_id=1168484924]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Type a name"
+
+[node name="Done" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=1735618056]
+visible = false
+layout_mode = 2
+text = "Done"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1545179143]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 272.0
+offset_right = 624.0
+offset_bottom = 373.0
+
+[node name="Start" type="Button" parent="VBoxContainer" unique_id=1027699367]
+layout_mode = 2
+text = "Start Game"
+
+[node name="Host" type="Button" parent="VBoxContainer" unique_id=891292265]
+layout_mode = 2
+text = "Host Game"
+
+[node name="Join" type="Button" parent="VBoxContainer" unique_id=193196409]
+layout_mode = 2
+text = "Join Game"
+
+[node name="Back" type="Button" parent="." unique_id=74991583]
+visible = false
+layout_mode = 0
+offset_left = 1104.0
+offset_right = 1149.0
+offset_bottom = 31.0
+text = "Back"
+
+[node name="Quit" type="Button" parent="." unique_id=614401001]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Quit"
+
+[connection signal="pressed" from="VBoxContainer2/HBoxContainer2/ChangeName" to="." method="_on_change_name_pressed"]
+[connection signal="text_changed" from="VBoxContainer2/HBoxContainer/TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="pressed" from="VBoxContainer2/HBoxContainer/Done" to="." method="_on_done_pressed"]
+[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
