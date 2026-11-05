@@ -4,13 +4,13 @@ I've decided to plan out the development process a bit here for transparency and
 
 Branch name            planned commits/updates/checklist
 
-#menus                  
+# menus                  
                          -start menu w/ three buttons (host game, start game, join gain)
                          -players can choose a name for themselves and it is displayed
                          - on transitioning to the lobby sg, hg, and jg disappears
                          -start game transitions to game level
 
-#multiplayer setup      
+# multiplayer setup      
                          - players can join each other's game
                          - players see each others' chosen name 
                          - players can pick an exclusive color to represent themselves
