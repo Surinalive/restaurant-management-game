@@ -1,8 +1,6 @@
 # restaurant-management-game
 
-I've decided to plan out the development process a bit here for transparency and to keep me on track.
-
-Branch name            planned commits/updates/checklist
+I've decided to plan out the development process a bit here for transparency and to keep me on track. Branch name and assigned tasks are below.
 
 # menus                  
                          - start menu w/ three buttons (host game, start game, join gain)
