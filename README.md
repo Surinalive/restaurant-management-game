@@ -5,10 +5,10 @@ I've decided to plan out the development process a bit here for transparency and
 Branch name            planned commits/updates/checklist
 
 # menus                  
-                         -start menu w/ three buttons (host game, start game, join gain)
-                         -players can choose a name for themselves and it is displayed
+                         - start menu w/ three buttons (host game, start game, join gain)
+                         - players can choose a name for themselves and it is displayed
                          - on transitioning to the lobby sg, hg, and jg disappears
-                         -start game transitions to game level
+                         - start game transitions to game level
 
 # multiplayer setup      
                          - players can join each other's game
