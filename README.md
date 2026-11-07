@@ -2,7 +2,9 @@
 
 I've decided to plan out the development process a bit here for transparency and to keep me on track. Branch name and assigned tasks are below.
 
-# menus                  
+
+# menus ( Done :) )                 
+
                          - start menu w/ three buttons (host game, start game, join gain)
                          - players can choose a name for themselves and it is displayed
                          - on transitioning to the lobby sg, hg, and jg disappears
