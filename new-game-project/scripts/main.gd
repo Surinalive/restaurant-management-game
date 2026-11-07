@@ -1,45 +1,90 @@
+## https://www.strayspark.studio/blog/godot-4-multiplayer-networking-authoritative-server
+
 extends Control
+
+@onready var host_button: Button = $VBoxContainer/Host
+@onready var join_button: Button = $VBoxContainer/HBoxContainer/Join
+@onready var address_input: LineEdit = $VBoxContainer/HBoxContainer/AddressInput
+@onready var player_list: ItemList = $ItemList
+@onready var start_button: Button = $VBoxContainer/Start
+@onready var back_button: Button = $Back
+@onready var change_name_button: Button = $VBoxContainer2/HBoxContainer2/ChangeName
+@onready var done_button: Button = $VBoxContainer2/HBoxContainer/Done
+@onready var name_text: TextEdit = $VBoxContainer2/HBoxContainer/NameText
+@onready var player_name_label: Label = $VBoxContainer2/HBoxContainer2/PlayerName
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Back.visible = false;
-	pass # Replace with function body.
+	host_button.pressed.connect(_on_host_pressed);
+	join_button.pressed.connect(_on_join_pressed);
+	start_button.pressed.connect(_on_start_pressed);
+
+	NetworkManager.player_connected.connect(_refresh_player_list);
+	NetworkManager.player_disconnected.connect(_refresh_player_list);
+	NetworkManager.connection_established.connect(_on_connected);
+	back_button.visible = false;
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
+@rpc("authority", "call_local", "reliable")
 func start_game() -> void:
 	print("Started game");
-	get_tree().change_scene_to_file("res://scenes/game_level.tscn")
-	pass #transition to game level
+	get_tree().change_scene_to_file("res://scenes/game")
+
 
 func _on_start_pressed() -> void:
-	start_game()
+	if not NetworkManager.is_server:
+		return
+	# Server tells everyone to start
+	start_game.rpc()
 	
 
 func lobby() -> void:
-	$VBoxContainer/Start.visible = false;
-	$VBoxContainer/Host.visible = false;
-	$VBoxContainer/Join.visible = false;
-	$Back.visible = true;
-	$VBoxContainer2/HBoxContainer2/ChangeName.visible = false;
+	#$VBoxContainer/Start.visible = false;
+	#$VBoxContainer/Host.visible = false;
+	#$VBoxContainer/Join.visible = false;
+	back_button.visible = true;
+	change_name_button.visible = false;
 	print("in lobby");
 
 
 func _on_host_pressed() -> void:
 	lobby();
+	var error = NetworkManager.host_game()
+	
+	if error == OK:
+		host_button.disabled = true
+		join_button.disabled = true
+		start_button.visible = true
+		_refresh_player_list(0)
+
 
 func _on_join_pressed() -> void:
 	lobby();
+	var address = address_input.text
+	if address.is_empty():
+		address = "127.0.0.1"
+	NetworkManager.join_game(address)
+	host_button.disabled = true
+	join_button.disabled = true	
+
+
+func _on_connected() -> void:
+	_refresh_player_list(0)
+
+
+func _refresh_player_list(_id: int) -> void:
+	player_list.clear()
+	for peer_id in NetworkManager.connected_players:
+		var info = NetworkManager.connected_players[peer_id]
+		player_list.add_item("%s (ID: %d)" % [info.player_name, info.peer_id])
+
 
 func _on_back_pressed() -> void:
-	$VBoxContainer/Start.visible = true;
-	$VBoxContainer/Host.visible = true;
-	$VBoxContainer/Join.visible = true;
-	$Back.visible = false;
+	start_button.visible = true;
+	host_button.visible = true;
+	join_button.visible = true;
+	back_button.visible = false;
 
 
 func _on_quit_pressed() -> void:
@@ -47,14 +92,14 @@ func _on_quit_pressed() -> void:
 	# quit game
 
 func _on_done_pressed() -> void:
-	$VBoxContainer2/HBoxContainer/TextEdit.visible = false;
-	$VBoxContainer2/HBoxContainer/Done.visible = false;
+	name_text.visible = false;
+	done_button.visible = false;
 	
 
 func _on_text_edit_text_changed() -> void:
-	$VBoxContainer2/HBoxContainer2/PlayerName.text = $VBoxContainer2/HBoxContainer/TextEdit.text;
+	player_name_label.text = name_text.text;
 
 func _on_change_name_pressed() -> void:
-	$VBoxContainer2/HBoxContainer/TextEdit.text = "Player";
-	$VBoxContainer2/HBoxContainer/TextEdit.visible = true;
-	$VBoxContainer2/HBoxContainer/Done.visible = true
+	name_text.text = "Player";
+	name_text.visible = true;
+	done_button.visible = true
