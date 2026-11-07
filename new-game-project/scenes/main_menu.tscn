@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cqow47bch5ocs"]
 
 [ext_resource type="Script" uid="uid://et1v30l85vd4" path="res://scripts/main.gd" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_ekxnf"]
 
 [node name="MainMenu" type="Control" unique_id=893311394]
 layout_mode = 3
@@ -10,9 +11,9 @@ script = ExtResource("1_l6cm7")
 [node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=545199748]
 layout_mode = 0
 offset_left = 392.0
-offset_top = 144.0
+offset_top = 152.0
 offset_right = 760.0
-offset_bottom = 216.0
+offset_bottom = 255.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2" unique_id=2026361013]
 layout_mode = 2
@@ -31,16 +32,34 @@ text = "Change name"
 layout_mode = 2
 
 [node name="NameText" type="TextEdit" parent="VBoxContainer2/HBoxContainer" unique_id=1168484924]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Type a name"
+placeholder_text = "Type a name"
 emoji_menu_enabled = false
 
 [node name="Done" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=1735618056]
-visible = false
 layout_mode = 2
 text = "Done"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer2" unique_id=796448854]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Sprite" type="Sprite2D" parent="VBoxContainer2/HBoxContainer3" unique_id=1468185051]
+position = Vector2(-56.000008, 17.000006)
+scale = Vector2(0.31250012, 0.31250003)
+texture = ExtResource("2_ekxnf")
+
+[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer2/HBoxContainer3" unique_id=605256200]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+
+[node name="ChangeColor" type="Button" parent="VBoxContainer2/HBoxContainer3" unique_id=1722821994]
+layout_mode = 2
+text = "Change Color"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1545179143]
 layout_mode = 0
@@ -92,5 +111,8 @@ offset_bottom = 648.0
 [connection signal="pressed" from="VBoxContainer2/HBoxContainer2/ChangeName" to="." method="_on_change_name_pressed"]
 [connection signal="text_changed" from="VBoxContainer2/HBoxContainer/NameText" to="." method="_on_text_edit_text_changed"]
 [connection signal="pressed" from="VBoxContainer2/HBoxContainer/Done" to="." method="_on_done_pressed"]
+[connection signal="color_changed" from="VBoxContainer2/HBoxContainer3/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="popup_closed" from="VBoxContainer2/HBoxContainer3/ColorPicker" to="." method="_on_color_picker_popup_closed"]
+[connection signal="pressed" from="VBoxContainer2/HBoxContainer3/ChangeColor" to="." method="_on_change_color_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

@@ -12,7 +12,8 @@ extends Control
 @onready var done_button: Button = $VBoxContainer2/HBoxContainer/Done
 @onready var name_text: TextEdit = $VBoxContainer2/HBoxContainer/NameText
 @onready var player_name_label: Label = $VBoxContainer2/HBoxContainer2/PlayerName
-
+@onready var color_picker: ColorPickerButton = $VBoxContainer2/HBoxContainer3/ColorPicker
+@onready var sprite: Sprite2D = $VBoxContainer2/HBoxContainer3/Sprite
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -108,3 +109,13 @@ func _on_server_disconnected() -> void:
 	back_button.visible = false;
 
 	player_list.clear()
+
+
+func _on_color_picker_color_changed(color: Color) -> void:
+	sprite.modulate = color;
+func _on_change_color_pressed() -> void:
+	color_picker.visible = true;
+
+
+func _on_color_picker_popup_closed() -> void:
+	color_picker.visible = false;
