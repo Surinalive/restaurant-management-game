@@ -82,17 +82,15 @@ offset_right = 8.0
 offset_bottom = 8.0
 text = "Quit"
 
-[node name="ItemList" type="ItemList" parent="." unique_id=1130409909]
-visible = false
+[node name="PlayerList" type="ItemList" parent="." unique_id=1130409909]
+clip_contents = false
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_top = 520.0
+offset_right = 128.0
+offset_bottom = 648.0
 
 [connection signal="pressed" from="VBoxContainer2/HBoxContainer2/ChangeName" to="." method="_on_change_name_pressed"]
 [connection signal="text_changed" from="VBoxContainer2/HBoxContainer/NameText" to="." method="_on_text_edit_text_changed"]
 [connection signal="pressed" from="VBoxContainer2/HBoxContainer/Done" to="." method="_on_done_pressed"]
-[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="VBoxContainer/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

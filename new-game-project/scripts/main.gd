@@ -5,7 +5,7 @@ extends Control
 @onready var host_button: Button = $VBoxContainer/Host
 @onready var join_button: Button = $VBoxContainer/HBoxContainer/Join
 @onready var address_input: LineEdit = $VBoxContainer/HBoxContainer/AddressInput
-@onready var player_list: ItemList = $ItemList
+@onready var player_list: ItemList = $PlayerList
 @onready var start_button: Button = $VBoxContainer/Start
 @onready var back_button: Button = $Back
 @onready var change_name_button: Button = $VBoxContainer2/HBoxContainer2/ChangeName
@@ -23,6 +23,7 @@ func _ready() -> void:
 	NetworkManager.player_connected.connect(_refresh_player_list);
 	NetworkManager.player_disconnected.connect(_refresh_player_list);
 	NetworkManager.connection_established.connect(_on_connected);
+	NetworkManager.server_disconnected.connect(_on_server_disconnected);
 	back_button.visible = false;
 
 
@@ -39,39 +40,34 @@ func _on_start_pressed() -> void:
 	start_game.rpc()
 	
 
-func lobby() -> void:
-	#$VBoxContainer/Start.visible = false;
-	#$VBoxContainer/Host.visible = false;
-	#$VBoxContainer/Join.visible = false;
+func in_lobby() -> void:
+	host_button.visible = false;
+	join_button.visible = false;
+	address_input.visible = false;
 	back_button.visible = true;
 	change_name_button.visible = false;
 	print("in lobby");
 
 
 func _on_host_pressed() -> void:
-	lobby();
 	var error = NetworkManager.host_game()
 	
 	if error == OK:
-		host_button.disabled = true
-		join_button.disabled = true
-		start_button.visible = true
+		in_lobby()
 		_refresh_player_list(0)
 
 
 func _on_join_pressed() -> void:
-	lobby();
+	in_lobby();
 	var address = address_input.text
 	if address.is_empty():
 		address = "127.0.0.1"
 	NetworkManager.join_game(address)
-	host_button.disabled = true
-	join_button.disabled = true	
+
 
 
 func _on_connected() -> void:
 	_refresh_player_list(0)
-
 
 func _refresh_player_list(_id: int) -> void:
 	player_list.clear()
@@ -81,21 +77,22 @@ func _refresh_player_list(_id: int) -> void:
 
 
 func _on_back_pressed() -> void:
+	NetworkManager.disconnect_game()
+	
 	start_button.visible = true;
 	host_button.visible = true;
 	join_button.visible = true;
 	back_button.visible = false;
 
+	player_list.clear()
 
 func _on_quit_pressed() -> void:
-	pass # Replace with function body.
-	# quit game
+	get_tree().quit()
 
 func _on_done_pressed() -> void:
 	name_text.visible = false;
 	done_button.visible = false;
 	
-
 func _on_text_edit_text_changed() -> void:
 	player_name_label.text = name_text.text;
 
@@ -103,3 +100,11 @@ func _on_change_name_pressed() -> void:
 	name_text.text = "Player";
 	name_text.visible = true;
 	done_button.visible = true
+
+func _on_server_disconnected() -> void:
+	start_button.visible = true;
+	host_button.visible = true;
+	join_button.visible = true;
+	back_button.visible = false;
+
+	player_list.clear()

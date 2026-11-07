@@ -5,6 +5,7 @@ extends Node
 
 signal player_connected(peer_id: int)
 signal player_disconnected(peer_id: int)
+signal server_disconnected
 signal connection_established
 signal connection_failed
 
@@ -78,6 +79,12 @@ func _on_peer_disconnected(id: int) -> void:
 	player_disconnected.emit(id)
 
 func _on_connected_to_server() -> void:
+	var my_id = multiplayer.get_unique_id()
+	print("Connected to server. My ID: %d" % my_id)
+	
+	# Add ourselves to our own player list!
+	connected_players[my_id] = PlayerInfo.new(my_id, "Player_%d" % my_id)	
+	
 	print("Connected to server. My ID: %d" % multiplayer.get_unique_id())
 	connection_established.emit()
 
@@ -89,3 +96,4 @@ func _on_connection_failed() -> void:
 func _on_server_disconnected() -> void:
 	print("Server disconnected")
 	disconnect_game()
+	server_disconnected.emit()
