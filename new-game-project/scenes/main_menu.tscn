@@ -8,82 +8,101 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_l6cm7")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=545199748]
+[node name="PlayerInfoContainer" type="VBoxContainer" parent="." unique_id=545199748]
 layout_mode = 0
 offset_left = 392.0
 offset_top = 152.0
 offset_right = 760.0
 offset_bottom = 255.0
+theme_override_constants/separation = 16
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2" unique_id=2026361013]
+[node name="PlayerNameContainer" type="HBoxContainer" parent="PlayerInfoContainer" unique_id=2026361013]
 layout_mode = 2
 
-[node name="PlayerName" type="Label" parent="VBoxContainer2/HBoxContainer2" unique_id=713189027]
+[node name="PlayerName" type="Label" parent="PlayerInfoContainer/PlayerNameContainer" unique_id=713189027]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Player"
 horizontal_alignment = 1
 
-[node name="ChangeName" type="Button" parent="VBoxContainer2/HBoxContainer2" unique_id=1029135863]
+[node name="ChangeName" type="Button" parent="PlayerInfoContainer/PlayerNameContainer" unique_id=1029135863]
 layout_mode = 2
 text = "Change name"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2" unique_id=425000540]
-layout_mode = 2
-
-[node name="NameText" type="TextEdit" parent="VBoxContainer2/HBoxContainer" unique_id=1168484924]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Type a name"
-emoji_menu_enabled = false
-
-[node name="Done" type="Button" parent="VBoxContainer2/HBoxContainer" unique_id=1735618056]
-layout_mode = 2
-text = "Done"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer2" unique_id=796448854]
+[node name="PlayerIconContainer" type="HBoxContainer" parent="PlayerInfoContainer" unique_id=796448854]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Sprite" type="Sprite2D" parent="VBoxContainer2/HBoxContainer3" unique_id=1468185051]
-position = Vector2(-56.000008, 17.000006)
-scale = Vector2(0.31250012, 0.31250003)
+[node name="Sprite" type="Sprite2D" parent="PlayerInfoContainer/PlayerIconContainer" unique_id=1468185051]
+position = Vector2(-128, 21.000002)
+scale = Vector2(0.4375, 0.4375001)
 texture = ExtResource("2_ekxnf")
 
-[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer2/HBoxContainer3" unique_id=605256200]
+[node name="ChangeColor" type="Button" parent="PlayerInfoContainer/PlayerIconContainer" unique_id=1722821994]
+layout_mode = 2
+text = "Change Color"
+
+[node name="NameChangeContainer" type="HBoxContainer" parent="." unique_id=425000540]
 visible = false
+layout_mode = 0
+offset_left = 352.0
+offset_top = 288.0
+offset_right = 796.0
+offset_bottom = 349.0
+
+[node name="NameText" type="TextEdit" parent="NameChangeContainer" unique_id=1168484924]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+placeholder_text = "Type a name"
+emoji_menu_enabled = false
+
+[node name="Done" type="Button" parent="NameChangeContainer" unique_id=1735618056]
+layout_mode = 2
+text = "Done"
+
+[node name="ColorPickerContainer" type="HBoxContainer" parent="." unique_id=2056799069]
+visible = false
+layout_mode = 0
+offset_left = 736.0
+offset_top = 280.0
+offset_right = 836.0
+offset_bottom = 380.0
+
+[node name="Sprite2D" type="Sprite2D" parent="ColorPickerContainer" unique_id=1887037210]
+position = Vector2(-304, 48.000015)
+scale = Vector2(2.0000002, 2.0000002)
+texture = ExtResource("2_ekxnf")
+
+[node name="ColorPicker" type="ColorPickerButton" parent="ColorPickerContainer" unique_id=605256200]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 edit_alpha = false
 edit_intensity = false
 
-[node name="ChangeColor" type="Button" parent="VBoxContainer2/HBoxContainer3" unique_id=1722821994]
-layout_mode = 2
-text = "Change Color"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1545179143]
+[node name="StartHostContainer" type="VBoxContainer" parent="." unique_id=1545179143]
 layout_mode = 0
 offset_left = 528.0
 offset_top = 272.0
 offset_right = 624.0
 offset_bottom = 373.0
 
-[node name="Start" type="Button" parent="VBoxContainer" unique_id=1027699367]
+[node name="Start" type="Button" parent="StartHostContainer" unique_id=1027699367]
 layout_mode = 2
 text = "Start Game"
 
-[node name="Host" type="Button" parent="VBoxContainer" unique_id=891292265]
+[node name="Host" type="Button" parent="StartHostContainer" unique_id=891292265]
 layout_mode = 2
 text = "Host Game"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1103556389]
+[node name="JoinContainer" type="HBoxContainer" parent="StartHostContainer" unique_id=1103556389]
 layout_mode = 2
 
-[node name="AddressInput" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1243661796]
+[node name="AddressInput" type="LineEdit" parent="StartHostContainer/JoinContainer" unique_id=1243661796]
 layout_mode = 2
 emoji_menu_enabled = false
 
-[node name="Join" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=193196409]
+[node name="Join" type="Button" parent="StartHostContainer/JoinContainer" unique_id=193196409]
 layout_mode = 2
 text = "Join Game"
 
@@ -102,17 +121,18 @@ offset_bottom = 8.0
 text = "Quit"
 
 [node name="PlayerList" type="ItemList" parent="." unique_id=1130409909]
+visible = false
 clip_contents = false
 layout_mode = 0
-offset_top = 520.0
-offset_right = 128.0
-offset_bottom = 648.0
+offset_left = 320.0
+offset_right = 832.0
+offset_bottom = 259.0
 
-[connection signal="pressed" from="VBoxContainer2/HBoxContainer2/ChangeName" to="." method="_on_change_name_pressed"]
-[connection signal="text_changed" from="VBoxContainer2/HBoxContainer/NameText" to="." method="_on_text_edit_text_changed"]
-[connection signal="pressed" from="VBoxContainer2/HBoxContainer/Done" to="." method="_on_done_pressed"]
-[connection signal="color_changed" from="VBoxContainer2/HBoxContainer3/ColorPicker" to="." method="_on_color_picker_color_changed"]
-[connection signal="popup_closed" from="VBoxContainer2/HBoxContainer3/ColorPicker" to="." method="_on_color_picker_popup_closed"]
-[connection signal="pressed" from="VBoxContainer2/HBoxContainer3/ChangeColor" to="." method="_on_change_color_pressed"]
+[connection signal="pressed" from="PlayerInfoContainer/PlayerNameContainer/ChangeName" to="." method="_on_change_name_pressed"]
+[connection signal="pressed" from="PlayerInfoContainer/PlayerIconContainer/ChangeColor" to="." method="_on_change_color_pressed"]
+[connection signal="text_changed" from="NameChangeContainer/NameText" to="." method="_on_text_edit_text_changed"]
+[connection signal="pressed" from="NameChangeContainer/Done" to="." method="_on_done_pressed"]
+[connection signal="color_changed" from="ColorPickerContainer/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="popup_closed" from="ColorPickerContainer/ColorPicker" to="." method="_on_color_picker_popup_closed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

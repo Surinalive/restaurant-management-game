@@ -2,18 +2,29 @@
 
 extends Control
 
-@onready var host_button: Button = $VBoxContainer/Host
-@onready var join_button: Button = $VBoxContainer/HBoxContainer/Join
-@onready var address_input: LineEdit = $VBoxContainer/HBoxContainer/AddressInput
-@onready var player_list: ItemList = $PlayerList
-@onready var start_button: Button = $VBoxContainer/Start
+@onready var player_info_container: VBoxContainer = $PlayerInfoContainer
+@onready var player_name_container: HBoxContainer = $PlayerInfoContainer/PlayerNameContainer
+@onready var player_name_label: Label = $PlayerInfoContainer/PlayerNameContainer/PlayerName
+@onready var change_name_button: Button = $PlayerInfoContainer/PlayerNameContainer/ChangeName
+@onready var name_change_container: HBoxContainer = $NameChangeContainer
+@onready var name_text: TextEdit = $NameChangeContainer/NameText
+@onready var done_button: Button = $NameChangeContainer/Done
+@onready var player_icon_container: HBoxContainer = $PlayerInfoContainer/PlayerIconContainer
+@onready var sprite: Sprite2D = $PlayerInfoContainer/PlayerIconContainer/Sprite
+@onready var change_color_button: Button = $PlayerInfoContainer/PlayerIconContainer/ChangeColor
+@onready var color_picker_container: HBoxContainer = $ColorPickerContainer
+@onready var color_sprite: Sprite2D = $ColorPickerContainer/Sprite2D
+@onready var color_picker: ColorPickerButton = $ColorPickerContainer/ColorPicker
+@onready var start_host_container: VBoxContainer = $StartHostContainer
+@onready var start_button: Button = $StartHostContainer/Start
+@onready var host_button: Button = $StartHostContainer/Host
+@onready var join_container: HBoxContainer = $StartHostContainer/JoinContainer
+@onready var address_input: LineEdit = $StartHostContainer/JoinContainer/AddressInput
+@onready var join_button: Button = $StartHostContainer/JoinContainer/Join
 @onready var back_button: Button = $Back
-@onready var change_name_button: Button = $VBoxContainer2/HBoxContainer2/ChangeName
-@onready var done_button: Button = $VBoxContainer2/HBoxContainer/Done
-@onready var name_text: TextEdit = $VBoxContainer2/HBoxContainer/NameText
-@onready var player_name_label: Label = $VBoxContainer2/HBoxContainer2/PlayerName
-@onready var color_picker: ColorPickerButton = $VBoxContainer2/HBoxContainer3/ColorPicker
-@onready var sprite: Sprite2D = $VBoxContainer2/HBoxContainer3/Sprite
+@onready var quit_button: Button = $Quit
+@onready var player_list: ItemList = $PlayerList
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,12 +55,23 @@ func _on_start_pressed() -> void:
 
 func in_lobby() -> void:
 	host_button.visible = false;
-	join_button.visible = false;
-	address_input.visible = false;
+	join_container.visible = false
 	back_button.visible = true;
-	change_name_button.visible = false;
+	player_list.visible = true;
+	player_name_container.visible = false;
+	player_icon_container.visible = false;
 	print("in lobby");
 
+func main_menu_reset() -> void:
+	start_button.visible = true;
+	host_button.visible = true;
+	join_container.visible = true
+	back_button.visible = false;
+	player_list.visible = false;
+	player_name_container.visible = true;
+	player_icon_container.visible = true;
+
+	player_list.clear()
 
 func _on_host_pressed() -> void:
 	var error = NetworkManager.host_game()
@@ -57,7 +79,6 @@ func _on_host_pressed() -> void:
 	if error == OK:
 		in_lobby()
 		_refresh_player_list(0)
-
 
 func _on_join_pressed() -> void:
 	in_lobby();
@@ -78,47 +99,41 @@ func _refresh_player_list(_id: int) -> void:
 		var info = NetworkManager.connected_players[peer_id]
 		player_list.add_item("%s (ID: %d)" % [info.player_name, info.peer_id])
 
-
 func _on_back_pressed() -> void:
 	NetworkManager.disconnect_game()
-	
-	start_button.visible = true;
-	host_button.visible = true;
-	join_button.visible = true;
-	back_button.visible = false;
-
-	player_list.clear()
+	main_menu_reset()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
 
 func _on_done_pressed() -> void:
-	name_text.visible = false;
-	done_button.visible = false;
+	name_change_container.visible = false;
+	player_info_container.visible = true;
+	start_host_container.visible = true;
 	
 func _on_text_edit_text_changed() -> void:
 	player_name_label.text = name_text.text;
 	NetworkManager.set_player_name(name_text.text);
 
 func _on_change_name_pressed() -> void:
-	name_text.text = "Player";
-	name_text.visible = true;
-	done_button.visible = true
+	#name_text.text = "Player";
+	name_change_container.visible = true;
+	player_info_container.visible = false;
+	start_host_container.visible = false
 
 func _on_server_disconnected() -> void:
-	start_button.visible = true;
-	host_button.visible = true;
-	join_button.visible = true;
-	back_button.visible = false;
-
-	player_list.clear()
-
+	main_menu_reset()
 
 func _on_color_picker_color_changed(color: Color) -> void:
 	sprite.modulate = color;
-func _on_change_color_pressed() -> void:
-	color_picker.visible = true;
+	color_sprite.modulate = color;
 
+func _on_change_color_pressed() -> void:
+	player_info_container.visible = false;
+	color_picker_container.visible  = true;
+	start_host_container.visible = false;
 
 func _on_color_picker_popup_closed() -> void:
-	color_picker.visible = false;
+	player_info_container.visible = true;
+	color_picker_container.visible  = false;
+	start_host_container.visible = true;
