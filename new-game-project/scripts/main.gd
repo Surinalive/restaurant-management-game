@@ -36,7 +36,7 @@ func _ready() -> void:
 	NetworkManager.player_disconnected.connect(_refresh_player_list);
 	NetworkManager.connection_established.connect(_on_connected);
 	NetworkManager.server_disconnected.connect(_on_server_disconnected);
-	NetworkManager.player_name_updated.connect(_player_name_updated)
+	NetworkManager.player_info_updated.connect(_player_info_updated)
 	back_button.visible = false;
 
 
@@ -90,14 +90,17 @@ func _on_join_pressed() -> void:
 func _on_connected() -> void:
 	_refresh_player_list(0)
 
-func _player_name_updated() -> void:
+func _player_info_updated() -> void:
 	_refresh_player_list(0)
 
 func _refresh_player_list(_id: int) -> void:
 	player_list.clear()
 	for peer_id in NetworkManager.connected_players:
 		var info = NetworkManager.connected_players[peer_id]
-		player_list.add_item("%s (ID: %d)" % [info.player_name, info.peer_id])
+		var icon_texture =  load("res://icon.svg")
+		
+		var item_index = player_list.add_item("%s (ID: %d)" % [info.player_name, info.peer_id], icon_texture)
+		player_list.set_item_icon_modulate(item_index, info.player_color)
 
 func _on_back_pressed() -> void:
 	NetworkManager.disconnect_game()
@@ -116,7 +119,6 @@ func _on_text_edit_text_changed() -> void:
 	NetworkManager.set_player_name(name_text.text);
 
 func _on_change_name_pressed() -> void:
-	#name_text.text = "Player";
 	name_change_container.visible = true;
 	player_info_container.visible = false;
 	start_host_container.visible = false
@@ -127,6 +129,7 @@ func _on_server_disconnected() -> void:
 func _on_color_picker_color_changed(color: Color) -> void:
 	sprite.modulate = color;
 	color_sprite.modulate = color;
+	NetworkManager.set_player_color(color);
 
 func _on_change_color_pressed() -> void:
 	player_info_container.visible = false;

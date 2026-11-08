@@ -128,6 +128,11 @@ offset_left = 320.0
 offset_right = 832.0
 offset_bottom = 259.0
 
+[node name="TextureRect" type="TextureRect" parent="PlayerList" unique_id=817399493]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="pressed" from="PlayerInfoContainer/PlayerNameContainer/ChangeName" to="." method="_on_change_name_pressed"]
 [connection signal="pressed" from="PlayerInfoContainer/PlayerIconContainer/ChangeColor" to="." method="_on_change_color_pressed"]
 [connection signal="text_changed" from="NameChangeContainer/NameText" to="." method="_on_text_edit_text_changed"]
