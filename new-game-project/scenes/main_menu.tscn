@@ -64,21 +64,24 @@ text = "Done"
 [node name="ColorPickerContainer" type="HBoxContainer" parent="." unique_id=2056799069]
 visible = false
 layout_mode = 0
-offset_left = 736.0
-offset_top = 280.0
-offset_right = 836.0
-offset_bottom = 380.0
+offset_left = 648.0
+offset_top = 272.0
+offset_right = 976.0
+offset_bottom = 372.0
 
 [node name="Sprite2D" type="Sprite2D" parent="ColorPickerContainer" unique_id=1887037210]
 position = Vector2(-304, 48.000015)
 scale = Vector2(2.0000002, 2.0000002)
 texture = ExtResource("2_ekxnf")
 
-[node name="ColorPicker" type="ColorPickerButton" parent="ColorPickerContainer" unique_id=605256200]
-custom_minimum_size = Vector2(100, 100)
+[node name="ColorList" type="ItemList" parent="ColorPickerContainer" unique_id=1906576249]
 layout_mode = 2
-edit_alpha = false
-edit_intensity = false
+size_flags_horizontal = 3
+theme_override_constants/line_separation = 4
+
+[node name="ColorPickedButton" type="Button" parent="ColorPickerContainer" unique_id=1823299482]
+layout_mode = 2
+text = "Pick Color"
 
 [node name="StartHostContainer" type="VBoxContainer" parent="." unique_id=1545179143]
 layout_mode = 0
@@ -137,7 +140,7 @@ offset_bottom = 40.0
 [connection signal="pressed" from="PlayerInfoContainer/PlayerIconContainer/ChangeColor" to="." method="_on_change_color_pressed"]
 [connection signal="text_changed" from="NameChangeContainer/NameText" to="." method="_on_text_edit_text_changed"]
 [connection signal="pressed" from="NameChangeContainer/Done" to="." method="_on_done_pressed"]
-[connection signal="color_changed" from="ColorPickerContainer/ColorPicker" to="." method="_on_color_picker_color_changed"]
-[connection signal="popup_closed" from="ColorPickerContainer/ColorPicker" to="." method="_on_color_picker_popup_closed"]
+[connection signal="item_selected" from="ColorPickerContainer/ColorList" to="." method="_on_color_list_item_selected"]
+[connection signal="pressed" from="ColorPickerContainer/ColorPickedButton" to="." method="_on_color_picked_button_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

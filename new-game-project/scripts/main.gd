@@ -14,7 +14,9 @@ extends Control
 @onready var change_color_button: Button = $PlayerInfoContainer/PlayerIconContainer/ChangeColor
 @onready var color_picker_container: HBoxContainer = $ColorPickerContainer
 @onready var color_sprite: Sprite2D = $ColorPickerContainer/Sprite2D
-@onready var color_picker: ColorPickerButton = $ColorPickerContainer/ColorPicker
+
+@onready var color_list: ItemList = $ColorPickerContainer/ColorList
+@onready var color_picked_button: Button = $ColorPickerContainer/ColorPickedButton
 @onready var start_host_container: VBoxContainer = $StartHostContainer
 @onready var start_button: Button = $StartHostContainer/Start
 @onready var host_button: Button = $StartHostContainer/Host
@@ -25,6 +27,14 @@ extends Control
 @onready var quit_button: Button = $Quit
 @onready var player_list: ItemList = $PlayerList
 
+@onready var color_dictionary = {red = Color.RED, 
+								orange = Color.ORANGE, 
+								yellow = Color.YELLOW, 
+								green = Color.GREEN,
+								blue = Color.BLUE,
+								purple = Color.PURPLE,
+								white = Color.WHITE,
+								black = Color.BLACK }
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,6 +48,7 @@ func _ready() -> void:
 	NetworkManager.server_disconnected.connect(_on_server_disconnected);
 	NetworkManager.player_info_updated.connect(_player_info_updated)
 	back_button.visible = false;
+
 
 
 @rpc("authority", "call_local", "reliable")
@@ -126,17 +137,21 @@ func _on_change_name_pressed() -> void:
 func _on_server_disconnected() -> void:
 	main_menu_reset()
 
-func _on_color_picker_color_changed(color: Color) -> void:
-	sprite.modulate = color;
-	color_sprite.modulate = color;
-	NetworkManager.set_player_color(color);
-
 func _on_change_color_pressed() -> void:
 	player_info_container.visible = false;
 	color_picker_container.visible  = true;
 	start_host_container.visible = false;
+	for color in color_dictionary :
+		color_list.add_item(color)
 
-func _on_color_picker_popup_closed() -> void:
+func _on_color_list_item_selected(index: int) -> void:
+	var color = color_dictionary[color_list.get_item_text(index)];
+	sprite.modulate = color;
+	color_sprite.modulate = color
+	NetworkManager.set_player_color(color);
+
+
+func _on_color_picked_button_pressed() -> void:
 	player_info_container.visible = true;
 	color_picker_container.visible  = false;
 	start_host_container.visible = true;
