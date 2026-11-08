@@ -66,14 +66,11 @@ func _on_join_pressed() -> void:
 		address = "127.0.0.1"
 	NetworkManager.join_game(address)
 
-
-
 func _on_connected() -> void:
 	_refresh_player_list(0)
 
 func _player_name_updated() -> void:
 	_refresh_player_list(0)
-
 
 func _refresh_player_list(_id: int) -> void:
 	player_list.clear()

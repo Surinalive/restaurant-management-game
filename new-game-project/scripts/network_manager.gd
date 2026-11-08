@@ -78,10 +78,13 @@ func _on_peer_connected(id: int) -> void:
 	print("Peer connected: %d" % id)
 	connected_players[id] = PlayerInfo.new(id, "Player_%d" % id)
 	player_connected.emit(id)
-	_receive_name_update.rpc(1, my_name)
 	
-	
-
+	#Only the server is allowed to send name updates!
+	if multiplayer.is_server():
+		# Send all existing custom names specifically to the player who just joined
+		for peer_id in connected_players:
+			_receive_name_update.rpc_id(id, peer_id, connected_players[peer_id].player_name)
+			
 func _on_peer_disconnected(id: int) -> void:
 	print("Peer disconnected: %d" % id)
 	connected_players.erase(id)
@@ -93,6 +96,8 @@ func _on_connected_to_server() -> void:
 	
 	# Add ourselves to our own player list!
 	connected_players[my_id] = PlayerInfo.new(my_id, my_name)	
+	
+	#send name to server
 	_send_name_to_server.rpc_id(1, my_name)
 	print("Connected to server. My ID: %d" % multiplayer.get_unique_id())
 	connection_established.emit()
@@ -112,24 +117,31 @@ func _on_server_disconnected() -> void:
 # Client tells Server its name
 @rpc("any_peer", "call_remote", "reliable")
 func _send_name_to_server(new_name: String) -> void:
-	if not is_server: 
+	if not multiplayer.is_server(): 
 		return
 		
 	var sender_id = multiplayer.get_remote_sender_id()
-	if connected_players.has(sender_id):
-		connected_players[sender_id].player_name = new_name
 	
-		# Server now broadcasts this client's name to everyone else
-		_receive_name_update.rpc(sender_id, new_name)
-		player_name_updated.emit()
-		print("sent name");
+	# RACE CONDITION FIX: Create the profile if it arrived early!
+	if not connected_players.has(sender_id):
+		connected_players[sender_id] = PlayerInfo.new(sender_id, new_name)
+	else:
+		connected_players[sender_id].player_name = new_name
+		
+	# Server now broadcasts this client's name to everyone else
+	_receive_name_update.rpc(sender_id, new_name)
+	player_name_updated.emit()
+	print("sent name");
 	
 
-	
 # Server tells Clients a name changed
 @rpc("authority", "call_remote", "reliable")
 func _receive_name_update(peer_id: int, new_name: String) -> void:
-	if connected_players.has(peer_id):
+	# RACE CONDITION FIX
+	if not connected_players.has(peer_id):
+		connected_players[peer_id] = PlayerInfo.new(peer_id, new_name)
+	else:
 		connected_players[peer_id].player_name = new_name
+		
 		player_name_updated.emit()
 		print("received name")
