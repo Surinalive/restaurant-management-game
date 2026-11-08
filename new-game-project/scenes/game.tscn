@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dim83odtr04nd"]
+
+[ext_resource type="Script" uid="uid://d6sresud0qhv" path="res://scripts/game_manager.gd" id="1_lnu2h"]
+[ext_resource type="Script" uid="uid://dnabsladf2sfb" path="res://scripts/server_game.gd" id="2_lbhrr"]
+[ext_resource type="Script" uid="uid://b30go3ol5ngnj" path="res://scripts/client_game.gd" id="3_iywne"]
+
+[node name="Game" type="Node" unique_id=1550069744]
+script = ExtResource("1_lnu2h")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=159499119]
+spawn_path = NodePath("../Players")
+
+[node name="Players" type="Node" parent="." unique_id=1589147165]
+
+[node name="ServerGame" type="Node" parent="." unique_id=1979000071]
+script = ExtResource("2_lbhrr")
+
+[node name="ClientGame" type="Node" parent="." unique_id=360941431]
+script = ExtResource("3_iywne")
