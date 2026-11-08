@@ -1,3 +1,6 @@
+## This is complicated and might not be necessary for a simple(?) game.
+## But pretty much provided by strayspark 
+
 # player_state.gd
 class_name PlayerState
 extends RefCounted

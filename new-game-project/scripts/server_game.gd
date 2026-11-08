@@ -53,52 +53,59 @@ func _process_input(peer_id: int, input: Dictionary, delta: float) -> void:
 	var move_vector = input.get("move", Vector2.ZERO)
 	move_vector = move_vector.limit_length(1.0)  # Prevent speed hacks
 
-	var jump = input.get("jump", false)
-	var shoot = input.get("shoot", false)
+	## no jumping!!
+	#var jump = input.get("jump", false)
+	#var shoot = input.get("shoot", false)
 
+	## change to something else later!
 	# Apply validated input to player
-	player_node._apply_input(move_vector, jump)
+	#player_node._apply_input(move_vector, jump) -> player_node._apply_input(move(?))
 
-	if shoot:
-		_handle_shoot(peer_id, player_node, input.get("aim_direction", Vector3.FORWARD))
+	## no shooting
+	#if shoot:
+		#_handle_shoot(peer_id, player_node, input.get("aim_direction", Vector3.FORWARD))
 
-func _handle_shoot(shooter_id: int, shooter: CharacterBody2D,
-					aim_direction: Vector2) -> void:
-	# Server performs the raycast -- never trust client hit detection
-	aim_direction = aim_direction.normalized()
 
-	var space_state = get_viewport().get_world_2d().direct_space_state
-	var ray_origin = shooter.global_position
-	var ray_end = ray_origin + aim_direction * 1000.0
+## no shooting
+#func _handle_shoot(shooter_id: int, shooter: CharacterBody2D,
+					#aim_direction: Vector2) -> void:
+	## Server performs the raycast -- never trust client hit detection
+	#aim_direction = aim_direction.normalized()
+#
+	#var space_state = get_viewport().get_world_2d().direct_space_state
+	#var ray_origin = shooter.global_position
+	#var ray_end = ray_origin + aim_direction * 1000.0
+#
+	#var query = PhysicsRayQueryParameters2D.create(ray_origin, ray_end)
+	#query.exclude = [shooter.get_rid()]
+	#query.collision_mask = 0b0110  # Players and environment
+#
+	#var result = space_state.intersect_ray(query)
+#
+	#if result:
+		#var hit_node = result.collider
+		#if hit_node is CharacterBody2D and hit_node.has_method("take_damage"):
+			#var damage = 25.0  # Server controls damage values
+			#hit_node.take_damage(damage, shooter_id)
+#
+			## Notify the shooter of the hit (for hit markers, sound effects)
+			#_notify_hit.rpc_id(shooter_id, result.position)
+#
+			## Notify the victim
+			#var victim_id = int(str(hit_node.name))
+			#_notify_damage.rpc_id(victim_id, damage, shooter_id)
 
-	var query = PhysicsRayQueryParameters2D.create(ray_origin, ray_end)
-	query.exclude = [shooter.get_rid()]
-	query.collision_mask = 0b0110  # Players and environment
 
-	var result = space_state.intersect_ray(query)
-
-	if result:
-		var hit_node = result.collider
-		if hit_node is CharacterBody2D and hit_node.has_method("take_damage"):
-			var damage = 25.0  # Server controls damage values
-			hit_node.take_damage(damage, shooter_id)
-
-			# Notify the shooter of the hit (for hit markers, sound effects)
-			_notify_hit.rpc_id(shooter_id, result.position)
-
-			# Notify the victim
-			var victim_id = int(str(hit_node.name))
-			_notify_damage.rpc_id(victim_id, damage, shooter_id)
-
-@rpc("authority", "call_remote", "reliable")
-func _notify_hit(hit_position: Vector3) -> void:
-	# Client-side hit feedback
-	pass
-
-@rpc("authority", "call_remote", "reliable")
-func _notify_damage(damage: float, attacker_id: int) -> void:
-	# Client-side damage feedback
-	pass
+## no hitting or damage!
+#@rpc("authority", "call_remote", "reliable")
+#func _notify_hit(hit_position: Vector3) -> void:
+	## Client-side hit feedback
+	#pass
+#
+#@rpc("authority", "call_remote", "reliable")
+#func _notify_damage(damage: float, attacker_id: int) -> void:
+	## Client-side damage feedback
+	#pass
 
 func _update_game_simulation(delta: float) -> void:
 	# Update projectiles, AI, pickup respawns, etc.

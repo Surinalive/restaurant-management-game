@@ -9,11 +9,12 @@ extends Node
 var state_buffer: Array[Dictionary] = []
 var interpolation_delay: float = 0.1  # 100ms delay
 
+## remove rotation!
 func add_state(timestamp: float, position: Vector2, rotation: Vector2) -> void:
 	state_buffer.append({
 		"timestamp": timestamp,
 		"position": position,
-		"rotation": rotation,
+		#"rotation": rotation,
 	})
 
 	# Keep buffer size reasonable
@@ -46,7 +47,8 @@ func get_interpolated_state(current_time: float) -> Dictionary:
 
 	var t = clampf((render_time - before.timestamp) / time_range, 0.0, 1.0)
 
+	## no rotation necessary
 	return {
 		"position": before.position.lerp(after.position, t),
-		"rotation": before.rotation.lerp(after.rotation, t),
+		#"rotation": before.rotation.lerp(after.rotation, t),
 	}

@@ -21,3 +21,6 @@ func set_player_name(name: String) -> void:
 
 func set_player_color(color: Color) -> void:
 	player_color = color;
+
+func set_ready(ready: bool) -> void:
+	is_ready = ready;

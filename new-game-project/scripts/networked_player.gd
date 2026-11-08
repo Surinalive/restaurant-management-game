@@ -10,13 +10,13 @@ extends CharacterBody2D
 @onready var interpolation: Node = $NetworkInterpolation
 
 @export var speed: float = 300.0
-@export var jump_velocity: float = -400.0
+#@export var jump_velocity: float = -400.0
 
 # Synced by MultiplayerSynchronizer
 var server_position: Vector2
 var server_velocity: Vector2
-var health: float = 100.0
-var is_alive: bool = true
+#var health: float = 100.0
+#var is_alive: bool = true
 
 # For tracking prediction
 var input_sequence: int = 0
@@ -47,24 +47,33 @@ func _physics_process(delta: float) -> void:
 		_client_process(delta)
 
 func _client_process(delta: float) -> void:
-	# Gather input
-	var input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var jump = Input.is_action_just_pressed("jump")
+	
+	# Our player doesn't jump.... only mouse clicks are acceptable inputs
+	## Gather input
+	#var input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	#var jump = Input.is_action_just_pressed("jump")
+	
+	## I think I should have some work here that captures clicks on allowable 
+	## floor(tiles?) and stores it below for the key "move"
 	
 	input_sequence += 1
 	var input_data = {
 		"sequence": input_sequence,
-		"move": input_vector,
-		"jump": jump
+		#"move": input_vector,
+		## no jumping
+		#"jump": jump
 	}
 	
 	# Send it to the server
 	_submit_input.rpc_id(1, input_data)
 	
 	# Predict the movement instantly on our screen
-	_apply_input(input_vector, jump)
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	## change this later when I properly understand it
+	#_apply_input(input_vector, jump) -> _apply_input(input(?)
+	
+	# No jumping + player is always on the floor
+	#if not is_on_floor():
+		#velocity += get_gravity() * delta
 	move_and_slide()
 	
 	# Store this exact movement so we can check it against the server later
@@ -80,15 +89,20 @@ func _submit_input(input_data: Dictionary) -> void:
 	if str(sender_id) != name:
 		return  # Prevent hacking: You can't send input for someone else's character
 		
-	var move_vector = input_data.get("move", Vector2.ZERO)
-	var jump = input_data.get("jump", false)
+	## No jumping nor move vector since point and click game
+	#var move_vector = input_data.get("move", Vector2.ZERO)
+	#var jump = input_data.get("jump", false)
 	
-	_apply_input(move_vector, jump)
+	## Change later when I understand what's going on
+	# var move = input_data.get("move") (?)
+	#_apply_input(move_vector, jump) -> _apply_input(move(?))
 
 # 4. SERVER PROCESSING
 func _server_process(delta: float) -> void:
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	## player is always on the floor.. no jumping!
+	#if not is_on_floor():
+		#velocity += get_gravity() * delta
+	#
 	
 	move_and_slide()
 	
@@ -103,9 +117,10 @@ func _apply_input(input_vector: Vector2, jump: bool) -> void:
 		velocity.x = direction * speed
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
-
-	if jump and is_on_floor():
-		velocity.y = jump_velocity
+	
+	## no jumping!!
+	#if jump and is_on_floor():
+		#velocity.y = jump_velocity
 
 # 6. RECONCILIATION
 # The MultiplayerSynchronizer must call this whenever server_position updates

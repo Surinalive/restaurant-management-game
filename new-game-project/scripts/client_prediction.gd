@@ -1,5 +1,7 @@
 ##https://www.strayspark.studio/blog/godot-4-multiplayer-networking-authoritative-server
 
+## NO IDEA WHAT TO DO HERE
+
 # client_prediction.gd
 extends Node
 
