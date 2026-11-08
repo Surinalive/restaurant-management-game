@@ -25,6 +25,7 @@ func _ready() -> void:
 	NetworkManager.player_disconnected.connect(_refresh_player_list);
 	NetworkManager.connection_established.connect(_on_connected);
 	NetworkManager.server_disconnected.connect(_on_server_disconnected);
+	NetworkManager.player_name_updated.connect(_player_name_updated)
 	back_button.visible = false;
 
 
@@ -70,6 +71,10 @@ func _on_join_pressed() -> void:
 func _on_connected() -> void:
 	_refresh_player_list(0)
 
+func _player_name_updated() -> void:
+	_refresh_player_list(0)
+
+
 func _refresh_player_list(_id: int) -> void:
 	player_list.clear()
 	for peer_id in NetworkManager.connected_players:
@@ -96,6 +101,7 @@ func _on_done_pressed() -> void:
 	
 func _on_text_edit_text_changed() -> void:
 	player_name_label.text = name_text.text;
+	NetworkManager.set_player_name(name_text.text);
 
 func _on_change_name_pressed() -> void:
 	name_text.text = "Player";
